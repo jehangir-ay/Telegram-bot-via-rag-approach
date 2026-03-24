@@ -30,7 +30,7 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chunks_created = rag_engine.process_pdf(file_path, doc_name)
     os.remove(file_path) # Clean up
     
-    await update.message.reply_text(f"✅ Successfully processed {doc_name} into {chunks_created} chunks and stored them in the local database!")
+    await update.message.reply_text(f" Successfully processed {doc_name} into {chunks_created} chunks and stored them in the local database!")
 
 async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args)
@@ -55,7 +55,7 @@ async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(answer)
     except Exception as e:
-        await update.message.reply_text(f"❌ Error: {str(e)}. Make sure Ollama is running!")
+        await update.message.reply_text(f" Error: {str(e)}. Make sure Ollama is running!")
 import os
 from dotenv import load_dotenv
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     MY_REAL_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
     if not MY_REAL_TOKEN:
-        print("❌ FATAL ERROR: TELEGRAM_BOT_TOKEN not found in .env file!")
+        print(" FATAL ERROR: TELEGRAM_BOT_TOKEN not found in .env file!")
     else:
         # Create the application
         app = Application.builder().token(MY_REAL_TOKEN).build()
@@ -81,5 +81,5 @@ if __name__ == '__main__':
         app.add_handler(CommandHandler("ask", ask_command))
         app.add_handler(MessageHandler(filters.Document.ALL, handle_document))
 
-        print("✅ Bot is running using .env token!")
+        print(" Bot is running using .env token!")
         app.run_polling()
