@@ -23,29 +23,29 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
     doc_name = update.message.document.file_name
     
     if not doc_name.endswith('.pdf'):
-        await update.message.reply_text("❌ Please upload a PDF file.")
+        await update.message.reply_text(" Please upload a PDF file.")
         return
 
-    await update.message.reply_text(f"📥 Downloading and processing {doc_name}...")
+    await update.message.reply_text(f" Downloading and processing {doc_name}...")
     file_path = f"downloads_{doc_name}"
     await file.download_to_drive(file_path)
     
     chunks_created = rag_engine.process_pdf(file_path, doc_name)
     os.remove(file_path) # Clean up
     
-    await update.message.reply_text(f"✅ Successfully processed {doc_name} into {chunks_created} chunks and stored them in the local database!")
+    await update.message.reply_text(f" Successfully processed {doc_name} into {chunks_created} chunks and stored them in the local database!")
 
 async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args)
     if not query:
-        await update.message.reply_text("⚠️ Please provide a query. Example: `/ask What is the company policy?`", parse_mode='Markdown')
+        await update.message.reply_text("Please provide a query. Example: `/ask What is the company policy?`", parse_mode='Markdown')
         return
 
     user_id = update.message.from_user.id
     history = user_history.get(user_id, [])
     history_context = " | ".join(history)
 
-    await update.message.reply_text("🔍 Thinking...")
+    await update.message.reply_text(">>> Thinking...")
     
     try:
         answer = rag_engine.query_llm(query, history_context)
@@ -58,13 +58,13 @@ async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(answer)
     except Exception as e:
-        await update.message.reply_text(f"❌ Error: {str(e)}. Make sure Ollama is running!")
+        await update.message.reply_text(f" Error: {str(e)}. Make sure Ollama is running!")
 
 # --- NEW HANDLER FOR INVALID QUERIES ---
 async def invalid_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # This triggers if a user sends plain text WITHOUT the /ask command
     msg = (
-        "⚠️ **Invalid Query Pattern!**\n\n"
+        " **Invalid Query Pattern!**\n\n"
         "I only answer questions that start with the `/ask` command.\n"
         "Example: `/ask who is jehangir ayoub?`"
     )
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     MY_REAL_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
     if not MY_REAL_TOKEN:
-        print("❌ FATAL ERROR: TELEGRAM_BOT_TOKEN not found in .env file!")
+        print(" FATAL ERROR: TELEGRAM_BOT_TOKEN not found in .env file!")
     else:
         # Create the application
         app = Application.builder().token(MY_REAL_TOKEN).build()
@@ -95,5 +95,5 @@ if __name__ == '__main__':
         # This catches any text that isn't a command or a document
         app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), invalid_query))
 
-        print("✅ Bot is running using .env token! Strict mode active.")
+        print(">>>> Bot is running using .env token! Strict mode active<<<<.")
         app.run_polling()
