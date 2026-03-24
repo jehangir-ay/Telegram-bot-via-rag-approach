@@ -1,6 +1,6 @@
 
 
-#  Mini-RAG Telegram Bot (Local LLM)
+#  Mini-RAG Telegram Bot (Local LLM)(only for text based pdfs)
 
 A lightweight Retrieval-Augmented Generation (RAG) system that allows users to upload PDF documents and ask questions about them via Telegram. This project was built as a Data Science assessment to demonstrate local LLM integration and efficient document retrieval[cite: 3, 7].
 
@@ -8,7 +8,7 @@ A lightweight Retrieval-Augmented Generation (RAG) system that allows users to u
 
 ### 1. Prerequisites
 * **Python 3.10+**
-* **Ollama**: [Download and install here](https://ollama.com/).
+* **Ollama**: [Download and install here]  (https://ollama.com/).
 * **Telegram Bot Token**: Get one from [@BotFather](https://t.me/botfather).
 
 ### 2. Installation
